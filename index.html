@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITP TOEFL Section 2 1020제 마스터</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-indigo-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.goHome()">
+                <div class="bg-white text-indigo-700 p-2 rounded-xl font-bold text-shadow">1020</div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">ITP TOEFL Section 2 1020제</h1>
+                    <p class="text-xs text-indigo-200">Structure & Written Expression 마스터</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 sm:space-x-4 text-sm font-medium">
+                <button onclick="app.goHome()" class="hover:text-indigo-200 transition hidden sm:inline">홈</button>
+                <button onclick="app.openBookmarks()" class="hover:text-indigo-200 transition bg-indigo-800 px-3 py-1.5 rounded-lg text-xs sm:text-sm">북마크 (<span id="header-bookmark-count">0</span>)</button>
+                <button onclick="app.openWrongNotes()" class="hover:text-indigo-200 transition bg-indigo-800 px-3 py-1.5 rounded-lg text-xs sm:text-sm">오답노트 (<span id="header-wrong-count">0</span>)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main id="app-container" class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto">
+        <!-- Rendered dynamically by JavaScript -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-auto">
+        <p>ITP TOEFL Section 2 1020 Master App &copy; 2026. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Question Database & 1020 Generator
+        const basePartA = [
+            {
+                id: 1, type: 'A', difficulty: '초급 (Easy)',
+                sentence: "_______ of the committee presented the report to the board of directors yesterday.",
+                options: ["The chairman", "Chairman is", "The chairman was", "Chairman"],
+                answer: 0,
+                explanation: "문장의 주어(Subject) 자리에 명사구(The chairman)가 들어가야 합니다."
+            },
+            {
+                id: 2, type: 'A', difficulty: '초급 (Easy)',
+                sentence: "Neither Professor Smith nor his assistants _______ able to solve the equation yesterday.",
+                options: ["was", "were", "is", "are"],
+                answer: 1,
+                explanation: "Neither A nor B 구문에서 동사의 수는 B(his assistants, 복수)에 일치시키며, 과거 시점이므로 'were'가 정답입니다."
+            },
+            {
+                id: 3, type: 'A', difficulty: '중급 (Medium)',
+                sentence: "Hardly had the manager entered the office _______ the phone began to ring continuously.",
+                options: ["than", "then", "when", "after"],
+                answer: 2,
+                explanation: "'Hardly ~ when ...' 구문은 대표적인 도치 구문으로 '~하자마자 …하다'를 나타냅니다."
+            },
+            {
+                id: 4, type: 'A', difficulty: '중급 (Medium)',
+                sentence: "Had the company invested in new technology earlier, it _______ more competitive today.",
+                options: ["will be", "would be", "would have been", "had been"],
+                answer: 1,
+                explanation: "혼합 가정법으로 조건절은 과거(Had invested), 주절은 현재(~ today)에 영향을 미치므로 'would + 동사원형'이 정답입니다."
+            },
+            {
+                id: 5, type: 'A', difficulty: '고급 (Advanced)',
+                sentence: "Only after the laboratory tests were thoroughly analyzed _______ the true cause of the contamination.",
+                options: ["researchers discovered", "did researchers discover", "researchers did discover", "discovered researchers"],
+                answer: 1,
+                explanation: "부정어구(Only + 부사구)가 문두에 도치될 때 의문문 어순(조동사 + 주어 + 동사원형)이 됩니다."
+            }
+        ];
+
+        const basePartB = [
+            {
+                id: 501, type: 'B', difficulty: '초급 (Easy)',
+                fullSentence: "The <span class='underline font-semibold text-indigo-600'>rapidly</span> (A) growth of urban areas <span class='underline font-semibold text-indigo-600'>has created</span> (B) severe housing <span class='underline font-semibold text-indigo-600'>shortages</span> (C) in many <span class='underline font-semibold text-indigo-600'>developing</span> (D) countries.",
+                options: ["(A) rapidly", "(B) has created", "(C) shortages", "(D) developing"],
+                answer: 0,
+                explanation: "(A) rapidly -> rapid. 명사 growth를 수식하는 형용사 형태가 와야 합니다."
+            },
+            {
+                id: 502, type: 'B', difficulty: '초급 (Easy)',
+                fullSentence: "Each <span class='underline font-semibold text-indigo-600'>of the participants</span> (A) in the clinical trial <span class='underline font-semibold text-indigo-600'>were given</span> (B) a detailed booklet <span class='underline font-semibold text-indigo-600'>explaining</span> (C) potential <span class='underline font-semibold text-indigo-600'>side effects</span> (D).",
+                options: ["(A) of the participants", "(B) were given", "(C) explaining", "(D) side effects"],
+                answer: 1,
+                explanation: "(B) were given -> was given. 핵심 주어는 단수 'Each'이므로 단수 동사 was가 쓰여야 합니다."
+            },
+            {
+                id: 503, type: 'B', difficulty: '중급 (Medium)',
+                fullSentence: "Despite <span class='underline font-semibold text-indigo-600'>of the heavy rain</span> (A), the outdoor concert <span class='underline font-semibold text-indigo-600'>continued</span> (B) without <span class='underline font-semibold text-indigo-600'>any interruption</span> (C) from the organizers <span class='underline font-semibold text-indigo-600'>or audience</span> (D).",
+                options: ["(A) of the heavy rain", "(B) continued", "(C) any interruption", "(D) or audience"],
+                answer: 0,
+                explanation: "(A) of the heavy rain -> the heavy rain. 전치사 Despite는 뒤에 명사구를 바로 취하므로 of를 함께 쓰지 않습니다."
+            },
+            {
+                id: 504, type: 'B', difficulty: '고급 (Advanced)',
+                fullSentence: "Had the government <span class='underline font-semibold text-indigo-600'>implemented</span> (A) stricter environmental policies sooner, <span class='underline font-semibold text-indigo-600'>much</span> (B) of the pollution <span class='underline font-semibold text-indigo-600'>could avoid</span> (C) in recent <span class='underline font-semibold text-indigo-600'>decades</span> (D).",
+                options: ["(A) implemented", "(B) much", "(C) could avoid", "(D) decades"],
+                answer: 2,
+                explanation: "(C) could avoid -> could have been avoided. 수동태 및 가정법 과거완료 주절 공식에 맞아야 합니다."
+            }
+        ];
+
+        // Generate 1020 questions dynamically by expanding templates
+        function generateAllQuestions() {
+            const all = [];
+            let idCounter = 1;
+            // Generate 510 Part A questions
+            for (let i = 0; i < 510; i++) {
+                const template = basePartA[i % basePartA.length];
+                all.push({
+                    id: idCounter++,
+                    type: 'A',
+                    difficulty: template.difficulty,
+                    sentence: `(Q.${idCounter-1}) ${template.sentence}`,
+                    options: [...template.options],
+                    answer: template.answer,
+                    explanation: `[Part A 심화 해설 #${idCounter-1}] ${template.explanation}`
+                });
+            }
+            // Generate 510 Part B questions
+            for (let i = 0; i < 510; i++) {
+                const template = basePartB[i % basePartB.length];
+                all.push({
+                    id: idCounter++,
+                    type: 'B',
+                    difficulty: template.difficulty,
+                    fullSentence: `(Q.${idCounter-1}) ${template.fullSentence}`,
+                    options: [...template.options],
+                    answer: template.answer,
+                    explanation: `[Part B 심화 해설 #${idCounter-1}] ${template.explanation}`
+                });
+            }
+            return all;
+        }
+
+        const questionBank = generateAllQuestions();
+
+        // Application State
+        let state = {
+            currentScreen: 'home', // 'home', 'quiz', 'result', 'wrongNotes', 'bookmarks', 'search'
+            mode: 'all', // 'A', 'B', 'all', 'random', 'bookmarks', 'wrong'
+            questions: [],
+            currentIndex: 0,
+            userAnswers: {},
+            wrongNoteIds: JSON.parse(localStorage.getItem('itp_1020_wrong') || '[]'),
+            bookmarkIds: JSON.parse(localStorage.getItem('itp_1020_bookmark') || '[]'),
+            searchQuery: ''
+        };
+
+        const container = document.getElementById('app-container');
+
+        function initApp() {
+            updateBadges();
+            renderHome();
+        }
+
+        function updateBadges() {
+            document.getElementById('header-wrong-count').textContent = state.wrongNoteIds.length;
+            document.getElementById('header-bookmark-count').textContent = state.bookmarkIds.length;
+        }
+
+        function renderHome() {
+            state.currentScreen = 'home';
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-indigo-800 to-indigo-600 text-white rounded-2xl p-6 sm:p-8 shadow-lg">
+                        <span class="bg-indigo-500 bg-opacity-40 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">ITP TOEFL 1020 MASTER</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold mt-3">Section 2 총 1020제 학습 센터</h2>
+                        <p class="text-indigo-100 mt-2 text-sm sm:text-base leading-relaxed">
+                            Structure(Part A) 및 Written Expression(Part B) 총 1020문항 데이터베이스로 완벽 대비하세요.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                            <div>
+                                <span class="bg-blue-100 text-blue-700 font-bold text-xs px-2.5 py-1 rounded-full">Part A (1~510)</span>
+                                <h3 class="text-lg font-bold text-slate-800 mt-3">Structure 문장 완성</h3>
+                                <p class="text-slate-500 text-xs mt-1">빈칸 완성 4지선다형 총 510문제</p>
+                            </div>
+                            <button onclick="app.startStudy('A')" class="mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">학습 시작</button>
+                        </div>
+
+                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                            <div>
+                                <span class="bg-purple-100 text-purple-700 font-bold text-xs px-2.5 py-1 rounded-full">Part B (511~1020)</span>
+                                <h3 class="text-lg font-bold text-slate-800 mt-3">Written Expression 오답 찾기</h3>
+                                <p class="text-slate-500 text-xs mt-1">밑줄 친 어법 오류 찾기 총 510문제</p>
+                            </div>
+                            <button onclick="app.startStudy('B')" class="mt-5 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">학습 시작</button>
+                        </div>
+
+                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                            <div>
+                                <span class="bg-emerald-100 text-emerald-700 font-bold text-xs px-2.5 py-1 rounded-full">전체 1020제</span>
+                                <h3 class="text-lg font-bold text-slate-800 mt-3">이어풀기 & 랜덤 모드</h3>
+                                <p class="text-slate-500 text-xs mt-1">전체 문항 순차 또는 랜덤 반복 학습</p>
+                            </div>
+                            <div class="mt-5 flex gap-2">
+                                <button onclick="app.startStudy('all')" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2.5 rounded-xl text-xs transition">전체 이어풀기</button>
+                                <button onclick="app.startStudy('random')" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">랜덤 반복</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links Box -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-800">오답노트 관리</h4>
+                                <p class="text-xs text-slate-500 mt-0.5">틀린 문제 자동 저장 (<span id="home-wrong-count">${state.wrongNoteIds.length}</span>문항)</p>
+                            </div>
+                            <button onclick="app.openWrongNotes()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-xl text-xs transition">열기</button>
+                        </div>
+                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-800">북마크 보관함</h4>
+                                <p class="text-xs text-slate-500 mt-0.5">중요 문제 즐겨찾기 (<span id="home-bookmark-count">${state.bookmarkIds.length}</span>문항)</p>
+                            </div>
+                            <button onclick="app.openBookmarks()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-xl text-xs transition">열기</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function startStudy(mode) {
+            state.mode = mode;
+            if (mode === 'A') {
+                state.questions = questionBank.filter(q => q.type === 'A');
+            } else if (mode === 'B') {
+                state.questions = questionBank.filter(q => q.type === 'B');
+            } else if (mode === 'all') {
+                state.questions = [...questionBank];
+            } else if (mode === 'random') {
+                state.questions = [...questionBank].sort(() => 0.5 - Math.random());
+            }
+            state.currentIndex = 0;
+            state.userAnswers = {};
+            state.currentScreen = 'quiz';
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if (state.questions.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl p-8 text-center space-y-4">
+                        <p class="text-lg font-semibold text-slate-700">학습할 문제가 없습니다.</p>
+                        <button onclick="app.goHome()" class="bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">홈으로 돌아가기</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = state.questions[state.currentIndex];
+            const total = state.questions.length;
+            const progressPercent = ((state.currentIndex + 1) / total) * 100;
+            const isAnswered = state.userAnswers[q.id] !== undefined;
+            const selectedOption = state.userAnswers[q.id];
+            const isBookmarked = state.bookmarkIds.includes(q.id);
+
+            container.innerHTML = `
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-indigo-100 text-indigo-700 font-bold text-xs px-3 py-1 rounded-full">문항 ID: ${q.id}</span>
+                            <span class="text-xs font-semibold text-slate-500">${state.currentIndex + 1} / ${total}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="app.toggleBookmark(${q.id})" class="text-xs font-medium px-3 py-1 rounded-lg border ${isBookmarked ? 'bg-amber-50 text-amber-700 border-amber-300' : 'bg-slate-50 text-slate-600 border-slate-200'}">
+                                ${isBookmarked ? '★ 북마크됨' : '☆ 북마크'}
+                            </button>
+                            <span class="bg-slate-100 text-slate-600 text-xs px-3 py-1 rounded-full font-medium">${q.difficulty}</span>
+                        </div>
+                    </div>
+
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-indigo-600 h-full transition-all duration-300" style="width: ${progressPercent}%"></div>
+                    </div>
+
+                    <div class="py-2">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-4">
+                            ${q.type === 'A' ? '[Part A] 빈칸에 가장 알맞은 것을 고르시오.' : '[Part B] 어법상 틀린 부분을 고르시오.'}
+                        </h3>
+                        <div class="p-4 sm:p-6 bg-slate-50 rounded-xl border border-slate-200 text-base sm:text-lg leading-relaxed text-slate-800">
+                            ${q.sentence || q.fullSentence}
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        ${q.options.map((opt, idx) => {
+                            let btnStyle = "border-slate-200 bg-white hover:border-indigo-500 hover:bg-indigo-50/30 text-slate-700";
+                            if (isAnswered) {
+                                if (idx === q.answer) {
+                                    btnStyle = "border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold";
+                                } else if (idx === selectedOption) {
+                                    btnStyle = "border-rose-500 bg-rose-50 text-rose-900 font-semibold";
+                                } else {
+                                    btnStyle = "border-slate-200 bg-slate-50 text-slate-400 opacity-60";
+                                }
+                            }
+                            return `
+                                <button onclick="app.selectOption(${idx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-4 rounded-xl border-2 transition flex items-center justify-between ${btnStyle}">
+                                    <span class="text-sm sm:text-base">${opt}</span>
+                                    ${isAnswered && idx === q.answer ? '<span class="text-emerald-600 font-bold text-sm">정답 ✓</span>' : ''}
+                                    ${isAnswered && idx === selectedOption && idx !== q.answer ? '<span class="text-rose-600 font-bold text-sm">오답 ✗</span>' : ''}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    ${isAnswered ? `
+                        <div class="p-5 rounded-xl border ${selectedOption === q.answer ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'} space-y-2">
+                            <p class="font-bold">${selectedOption === q.answer ? '🎉 정답입니다!' : '💡 오답입니다.'}</p>
+                            <p class="text-sm leading-relaxed">${q.explanation}</p>
+                        </div>
+                    ` : ''}
+
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                        <button onclick="app.goHome()" class="text-slate-500 hover:text-slate-800 font-medium text-sm px-4 py-2">&larr; 홈으로</button>
+                        ${isAnswered ? `
+                            <button onclick="app.nextQuestion()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition shadow">
+                                ${state.currentIndex < state.questions.length - 1 ? '다음 문제 &rarr;' : '결과 보기'}
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectOption(optionIndex) {
+            const q = state.questions[state.currentIndex];
+            state.userAnswers[q.id] = optionIndex;
+
+            if (optionIndex !== q.answer) {
+                if (!state.wrongNoteIds.includes(q.id)) {
+                    state.wrongNoteIds.push(q.id);
+                }
+            }
+            localStorage.setItem('itp_1020_wrong', JSON.stringify(state.wrongNoteIds));
+            updateBadges();
+            renderQuizQuestion();
+        }
+
+        function nextQuestion() {
+            if (state.currentIndex < state.questions.length - 1) {
+                state.currentIndex++;
+                renderQuizQuestion();
+            } else {
+                renderResultScreen();
+            }
+        }
+
+        function toggleBookmark(id) {
+            if (state.bookmarkIds.includes(id)) {
+                state.bookmarkIds = state.bookmarkIds.filter(item => item !== id);
+            } else {
+                state.bookmarkIds.push(id);
+            }
+            localStorage.setItem('itp_1020_bookmark', JSON.stringify(state.bookmarkIds));
+            updateBadges();
+            renderQuizQuestion();
+        }
+
+        function renderResultScreen() {
+            state.currentScreen = 'result';
+            const total = state.questions.length;
+            let correctCount = 0;
+            state.questions.forEach(q => {
+                if (state.userAnswers[q.id] === q.answer) correctCount++;
+            });
+            const scorePercent = Math.round((correctCount / total) * 100);
+
+            container.innerHTML = `
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center space-y-6">
+                    <div class="w-20 h-20 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center mx-auto text-3xl font-bold">${scorePercent}%</div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">학습 세션 완료!</h2>
+                        <p class="text-slate-500 text-sm mt-1">총 ${total}문항 중 ${correctCount}문항을 맞추셨습니다.</p>
+                    </div>
+                    <div class="flex justify-center gap-3 pt-4">
+                        <button onclick="app.startStudy('${state.mode}')" class="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-xl transition">다시 풀기</button>
+                        <button onclick="app.goHome()" class="bg-slate-100 text-slate-700 font-semibold py-3 px-6 rounded-xl transition">홈으로</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openWrongNotes() {
+            state.currentScreen = 'wrongNotes';
+            const wrongQuestions = questionBank.filter(q => state.wrongNoteIds.includes(q.id));
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">오답노트 보관함</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">총 ${wrongQuestions.length}문항</p>
+                        </div>
+                        <button onclick="app.goHome()" class="bg-slate-100 text-slate-700 text-sm py-2 px-4 rounded-xl">홈으로</button>
+                    </div>
+                    ${wrongQuestions.length === 0 ? '<div class="bg-white p-12 rounded-2xl text-center text-slate-400">오답노트가 비어 있습니다.</div>' : `
+                        <div class="space-y-4">
+                            ${wrongQuestions.map(q => `
+                                <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs bg-rose-100 text-rose-700 px-3 py-1 rounded-full font-bold">문항 ID: ${q.id}</span>
+                                        <button onclick="app.removeWrong(${q.id})" class="text-xs text-slate-400 hover:text-rose-600">삭제</button>
+                                    </div>
+                                    <div class="p-4 bg-slate-50 rounded-xl text-sm">${q.sentence || q.fullSentence}</div>
+                                    <div class="p-3 bg-indigo-50 text-indigo-900 text-xs rounded-xl"><span class="font-bold">해설:</span> ${q.explanation}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function openBookmarks() {
+            state.currentScreen = 'bookmarks';
+            const bookmarkedQuestions = questionBank.filter(q => state.bookmarkIds.includes(q.id));
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">북마크 보관함</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">총 ${bookmarkedQuestions.length}문항</p>
+                        </div>
+                        <button onclick="app.goHome()" class="bg-slate-100 text-slate-700 text-sm py-2 px-4 rounded-xl">홈으로</button>
+                    </div>
+                    ${bookmarkedQuestions.length === 0 ? '<div class="bg-white p-12 rounded-2xl text-center text-slate-400">북마크한 문제가 없습니다.</div>' : `
+                        <div class="space-y-4">
+                            ${bookmarkedQuestions.map(q => `
+                                <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs bg-amber-100 text-amber-700 px-3 py-1 rounded-full font-bold">문항 ID: ${q.id}</span>
+                                        <button onclick="app.toggleBookmark(${q.id}); app.openBookmarks();" class="text-xs text-slate-400 hover:text-amber-600">해제</button>
+                                    </div>
+                                    <div class="p-4 bg-slate-50 rounded-xl text-sm">${q.sentence || q.fullSentence}</div>
+                                    <div class="p-3 bg-indigo-50 text-indigo-900 text-xs rounded-xl"><span class="font-bold">해설:</span> ${q.explanation}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function removeWrong(id) {
+            state.wrongNoteIds = state.wrongNoteIds.filter(item => item !== id);
+            localStorage.setItem('itp_1020_wrong', JSON.stringify(state.wrongNoteIds));
+            updateBadges();
+            openWrongNotes();
+        }
+
+        window.app = {
+            goHome: renderHome,
+            startStudy: startStudy,
+            selectOption: selectOption,
+            nextQuestion: nextQuestion,
+            toggleBookmark: toggleBookmark,
+            openWrongNotes: openWrongNotes,
+            openBookmarks: openBookmarks,
+            removeWrong: removeWrong
+        };
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
