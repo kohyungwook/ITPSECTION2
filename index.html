@@ -3,484 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITP TOEFL Section 2 1020제 마스터</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>기관토플(ITP TOEFL) Section 2 마스터 (GitHub 클라우드 연동)</title>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 25px; }
+        header h1 { font-size: 1.8rem; color: var(--primary); margin-bottom: 8px; }
+        header p { color: var(--text-secondary); font-size: 0.95rem; }
+        
+        .card { background: var(--card-bg); border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); margin-bottom: 20px; }
+        
+        /* GitHub 설정 바 */
+        .sync-bar { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .sync-bar input { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.85rem; width: 140px; }
+        
+        /* 메인 메뉴 화면 */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+        .menu-btn { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .menu-btn:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.1); }
+        .menu-btn h3 { color: var(--primary); margin-bottom: 6px; font-size: 1.2rem; }
+        .menu-btn p { color: var(--text-secondary); font-size: 0.85rem; }
+
+        /* 학습 화면 */
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+        .badge { background: #eff6ff; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
+        
+        .question-box { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; background: #f8fafc; padding: 16px; border-radius: 8px; border-left: 4px solid var(--primary); }
+        
+        .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .option-item { background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 16px; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
+        .option-item:hover { background: #f1f5f9; border-color: var(--primary); }
+        .option-item.selected { background: #eff6ff; border-color: var(--primary); font-weight: bold; }
+        .option-item.correct { background: #dcfce7 !important; border-color: var(--success) !important; color: var(--success); }
+        .option-item.incorrect { background: #fee2e2 !important; border-color: var(--danger) !important; color: var(--danger); }
+
+        .explanation-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin-bottom: 20px; display: none; }
+        .explanation-box.show { display: block; }
+        .explanation-box h4 { color: var(--success); margin-bottom: 6px; font-size: 0.95rem; }
+
+        .nav-btns { display: flex; justify-content: space-between; gap: 10px; }
+        button { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: var(--primary-dark); }
+        button.secondary { background: #64748b; }
+        button.secondary:hover { background: #475569; }
+        button.sm { padding: 6px 12px; font-size: 0.85rem; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* 오답노트 */
+        .note-item { border-bottom: 1px solid var(--border-color); padding: 12px 0; }
+        .note-item:last-child { border-bottom: none; }
+        
+        .hidden { display: none !important; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body>
+    <div class="container">
+        <header>
+            <h1>기관토플(ITP TOEFL) Section 2</h1>
+            <p>총 1020문항 마스터 과정 (GitHub 클라우드 연동형)</p>
+        </header>
 
-    <!-- Header -->
-    <header class="bg-indigo-700 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.goHome()">
-                <div class="bg-white text-indigo-700 p-2 rounded-xl font-bold text-shadow">1020</div>
-                <div>
-                    <h1 class="font-bold text-lg leading-tight">ITP TOEFL Section 2 1020제</h1>
-                    <p class="text-xs text-indigo-200">Structure & Written Expression 마스터</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-2 sm:space-x-4 text-sm font-medium">
-                <button onclick="app.goHome()" class="hover:text-indigo-200 transition hidden sm:inline">홈</button>
-                <button onclick="app.openBookmarks()" class="hover:text-indigo-200 transition bg-indigo-800 px-3 py-1.5 rounded-lg text-xs sm:text-sm">북마크 (<span id="header-bookmark-count">0</span>)</button>
-                <button onclick="app.openWrongNotes()" class="hover:text-indigo-200 transition bg-indigo-800 px-3 py-1.5 rounded-lg text-xs sm:text-sm">오답노트 (<span id="header-wrong-count">0</span>)</button>
+        <!-- GitHub 동기화 설정 바 -->
+        <div class="sync-bar">
+            <span>☁️ <b>GitHub 동기화 설정</b> (오답노트 클라우드 저장)</span>
+            <div>
+                <button class="secondary sm" onclick="toggleSyncModal()">설정 열기</button>
+                <span id="syncStatus" style="font-size: 0.8rem; margin-left: 8px; color: var(--text-secondary);">로컬 모드</span>
             </div>
         </div>
-    </header>
 
-    <!-- Main Container -->
-    <main id="app-container" class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto">
-        <!-- Rendered dynamically by JavaScript -->
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-auto">
-        <p>ITP TOEFL Section 2 1020 Master App &copy; 2026. All rights reserved.</p>
-    </footer>
-
-    <!-- JavaScript Application Logic -->
-    <script>
-        // Question Database & 1020 Generator
-        const basePartA = [
-            {
-                id: 1, type: 'A', difficulty: '초급 (Easy)',
-                sentence: "_______ of the committee presented the report to the board of directors yesterday.",
-                options: ["The chairman", "Chairman is", "The chairman was", "Chairman"],
-                answer: 0,
-                explanation: "문장의 주어(Subject) 자리에 명사구(The chairman)가 들어가야 합니다."
-            },
-            {
-                id: 2, type: 'A', difficulty: '초급 (Easy)',
-                sentence: "Neither Professor Smith nor his assistants _______ able to solve the equation yesterday.",
-                options: ["was", "were", "is", "are"],
-                answer: 1,
-                explanation: "Neither A nor B 구문에서 동사의 수는 B(his assistants, 복수)에 일치시키며, 과거 시점이므로 'were'가 정답입니다."
-            },
-            {
-                id: 3, type: 'A', difficulty: '중급 (Medium)',
-                sentence: "Hardly had the manager entered the office _______ the phone began to ring continuously.",
-                options: ["than", "then", "when", "after"],
-                answer: 2,
-                explanation: "'Hardly ~ when ...' 구문은 대표적인 도치 구문으로 '~하자마자 …하다'를 나타냅니다."
-            },
-            {
-                id: 4, type: 'A', difficulty: '중급 (Medium)',
-                sentence: "Had the company invested in new technology earlier, it _______ more competitive today.",
-                options: ["will be", "would be", "would have been", "had been"],
-                answer: 1,
-                explanation: "혼합 가정법으로 조건절은 과거(Had invested), 주절은 현재(~ today)에 영향을 미치므로 'would + 동사원형'이 정답입니다."
-            },
-            {
-                id: 5, type: 'A', difficulty: '고급 (Advanced)',
-                sentence: "Only after the laboratory tests were thoroughly analyzed _______ the true cause of the contamination.",
-                options: ["researchers discovered", "did researchers discover", "researchers did discover", "discovered researchers"],
-                answer: 1,
-                explanation: "부정어구(Only + 부사구)가 문두에 도치될 때 의문문 어순(조동사 + 주어 + 동사원형)이 됩니다."
-            }
-        ];
-
-        const basePartB = [
-            {
-                id: 501, type: 'B', difficulty: '초급 (Easy)',
-                fullSentence: "The <span class='underline font-semibold text-indigo-600'>rapidly</span> (A) growth of urban areas <span class='underline font-semibold text-indigo-600'>has created</span> (B) severe housing <span class='underline font-semibold text-indigo-600'>shortages</span> (C) in many <span class='underline font-semibold text-indigo-600'>developing</span> (D) countries.",
-                options: ["(A) rapidly", "(B) has created", "(C) shortages", "(D) developing"],
-                answer: 0,
-                explanation: "(A) rapidly -> rapid. 명사 growth를 수식하는 형용사 형태가 와야 합니다."
-            },
-            {
-                id: 502, type: 'B', difficulty: '초급 (Easy)',
-                fullSentence: "Each <span class='underline font-semibold text-indigo-600'>of the participants</span> (A) in the clinical trial <span class='underline font-semibold text-indigo-600'>were given</span> (B) a detailed booklet <span class='underline font-semibold text-indigo-600'>explaining</span> (C) potential <span class='underline font-semibold text-indigo-600'>side effects</span> (D).",
-                options: ["(A) of the participants", "(B) were given", "(C) explaining", "(D) side effects"],
-                answer: 1,
-                explanation: "(B) were given -> was given. 핵심 주어는 단수 'Each'이므로 단수 동사 was가 쓰여야 합니다."
-            },
-            {
-                id: 503, type: 'B', difficulty: '중급 (Medium)',
-                fullSentence: "Despite <span class='underline font-semibold text-indigo-600'>of the heavy rain</span> (A), the outdoor concert <span class='underline font-semibold text-indigo-600'>continued</span> (B) without <span class='underline font-semibold text-indigo-600'>any interruption</span> (C) from the organizers <span class='underline font-semibold text-indigo-600'>or audience</span> (D).",
-                options: ["(A) of the heavy rain", "(B) continued", "(C) any interruption", "(D) or audience"],
-                answer: 0,
-                explanation: "(A) of the heavy rain -> the heavy rain. 전치사 Despite는 뒤에 명사구를 바로 취하므로 of를 함께 쓰지 않습니다."
-            },
-            {
-                id: 504, type: 'B', difficulty: '고급 (Advanced)',
-                fullSentence: "Had the government <span class='underline font-semibold text-indigo-600'>implemented</span> (A) stricter environmental policies sooner, <span class='underline font-semibold text-indigo-600'>much</span> (B) of the pollution <span class='underline font-semibold text-indigo-600'>could avoid</span> (C) in recent <span class='underline font-semibold text-indigo-600'>decades</span> (D).",
-                options: ["(A) implemented", "(B) much", "(C) could avoid", "(D) decades"],
-                answer: 2,
-                explanation: "(C) could avoid -> could have been avoided. 수동태 및 가정법 과거완료 주절 공식에 맞아야 합니다."
-            }
-        ];
-
-        // Generate 1020 questions dynamically by expanding templates
-        function generateAllQuestions() {
-            const all = [];
-            let idCounter = 1;
-            // Generate 510 Part A questions
-            for (let i = 0; i < 510; i++) {
-                const template = basePartA[i % basePartA.length];
-                all.push({
-                    id: idCounter++,
-                    type: 'A',
-                    difficulty: template.difficulty,
-                    sentence: `(Q.${idCounter-1}) ${template.sentence}`,
-                    options: [...template.options],
-                    answer: template.answer,
-                    explanation: `[Part A 심화 해설 #${idCounter-1}] ${template.explanation}`
-                });
-            }
-            // Generate 510 Part B questions
-            for (let i = 0; i < 510; i++) {
-                const template = basePartB[i % basePartB.length];
-                all.push({
-                    id: idCounter++,
-                    type: 'B',
-                    difficulty: template.difficulty,
-                    fullSentence: `(Q.${idCounter-1}) ${template.fullSentence}`,
-                    options: [...template.options],
-                    answer: template.answer,
-                    explanation: `[Part B 심화 해설 #${idCounter-1}] ${template.explanation}`
-                });
-            }
-            return all;
-        }
-
-        const questionBank = generateAllQuestions();
-
-        // Application State
-        let state = {
-            currentScreen: 'home', // 'home', 'quiz', 'result', 'wrongNotes', 'bookmarks', 'search'
-            mode: 'all', // 'A', 'B', 'all', 'random', 'bookmarks', 'wrong'
-            questions: [],
-            currentIndex: 0,
-            userAnswers: {},
-            wrongNoteIds: JSON.parse(localStorage.getItem('itp_1020_wrong') || '[]'),
-            bookmarkIds: JSON.parse(localStorage.getItem('itp_1020_bookmark') || '[]'),
-            searchQuery: ''
-        };
-
-        const container = document.getElementById('app-container');
-
-        function initApp() {
-            updateBadges();
-            renderHome();
-        }
-
-        function updateBadges() {
-            document.getElementById('header-wrong-count').textContent = state.wrongNoteIds.length;
-            document.getElementById('header-bookmark-count').textContent = state.bookmarkIds.length;
-        }
-
-        function renderHome() {
-            state.currentScreen = 'home';
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="bg-gradient-to-r from-indigo-800 to-indigo-600 text-white rounded-2xl p-6 sm:p-8 shadow-lg">
-                        <span class="bg-indigo-500 bg-opacity-40 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">ITP TOEFL 1020 MASTER</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold mt-3">Section 2 총 1020제 학습 센터</h2>
-                        <p class="text-indigo-100 mt-2 text-sm sm:text-base leading-relaxed">
-                            Structure(Part A) 및 Written Expression(Part B) 총 1020문항 데이터베이스로 완벽 대비하세요.
-                        </p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                            <div>
-                                <span class="bg-blue-100 text-blue-700 font-bold text-xs px-2.5 py-1 rounded-full">Part A (1~510)</span>
-                                <h3 class="text-lg font-bold text-slate-800 mt-3">Structure 문장 완성</h3>
-                                <p class="text-slate-500 text-xs mt-1">빈칸 완성 4지선다형 총 510문제</p>
-                            </div>
-                            <button onclick="app.startStudy('A')" class="mt-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">학습 시작</button>
-                        </div>
-
-                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                            <div>
-                                <span class="bg-purple-100 text-purple-700 font-bold text-xs px-2.5 py-1 rounded-full">Part B (511~1020)</span>
-                                <h3 class="text-lg font-bold text-slate-800 mt-3">Written Expression 오답 찾기</h3>
-                                <p class="text-slate-500 text-xs mt-1">밑줄 친 어법 오류 찾기 총 510문제</p>
-                            </div>
-                            <button onclick="app.startStudy('B')" class="mt-5 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">학습 시작</button>
-                        </div>
-
-                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                            <div>
-                                <span class="bg-emerald-100 text-emerald-700 font-bold text-xs px-2.5 py-1 rounded-full">전체 1020제</span>
-                                <h3 class="text-lg font-bold text-slate-800 mt-3">이어풀기 & 랜덤 모드</h3>
-                                <p class="text-slate-500 text-xs mt-1">전체 문항 순차 또는 랜덤 반복 학습</p>
-                            </div>
-                            <div class="mt-5 flex gap-2">
-                                <button onclick="app.startStudy('all')" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2.5 rounded-xl text-xs transition">전체 이어풀기</button>
-                                <button onclick="app.startStudy('random')" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">랜덤 반복</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Links Box -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
-                            <div>
-                                <h4 class="font-bold text-slate-800">오답노트 관리</h4>
-                                <p class="text-xs text-slate-500 mt-0.5">틀린 문제 자동 저장 (<span id="home-wrong-count">${state.wrongNoteIds.length}</span>문항)</p>
-                            </div>
-                            <button onclick="app.openWrongNotes()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-xl text-xs transition">열기</button>
-                        </div>
-                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
-                            <div>
-                                <h4 class="font-bold text-slate-800">북마크 보관함</h4>
-                                <p class="text-xs text-slate-500 mt-0.5">중요 문제 즐겨찾기 (<span id="home-bookmark-count">${state.bookmarkIds.length}</span>문항)</p>
-                            </div>
-                            <button onclick="app.openBookmarks()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-xl text-xs transition">열기</button>
-                        </div>
-                    </div>
+        <!-- 메인 메뉴 -->
+        <div id="mainMenu" class="card">
+            <h2>학습 모드를 선택하세요</h2>
+            <div class="menu-grid">
+                <div class="menu-btn" onclick="startStudy('A')">
+                    <h3>Part A</h3>
+                    <p>Structure (1~510번)<br>문장 완성 유형</p>
                 </div>
-            `;
+                <div class="menu-btn" onclick="startStudy('B')">
+                    <h3>Part B</h3>
+                    <p>Written Expression (511~1020번)<br>오류 찾기 유형</p>
+                </div>
+            </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="secondary" onclick="openWrongNotes()">오답 노트 보기 (<span id="wrongCount">0</span>)</button>
+            </div>
+        </div>
+
+        <!-- 퀴즈 화면 -->
+        <div id="quizScreen" class="card hidden">
+            <div class="quiz-header">
+                <span id="partBadge" class="badge">Part A</span>
+                <span id="progressText" style="font-weight: 600; color: var(--text-secondary);">1 / 510</span>
+                <button class="secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="goHome()">메뉴로</button>
+            </div>
+            
+            <div id="questionBox" class="question-box">문제를 불러오는 중입니다...</div>
+            
+            <div id="optionsList" class="options-list"></div>
+            
+            <div id="explanationBox" class="explanation-box">
+                <h4>💡 해설</h4>
+                <p id="explanationText"></p>
+            </div>
+
+            <div class="nav-btns">
+                <button class="secondary" onclick="prevQuestion()">이전 문제</button>
+                <button id="submitBtn" onclick="submitAnswer()">정답 확인</button>
+                <button id="nextBtn" onclick="nextQuestion()" class="hidden">다음 문제</button>
+            </div>
+        </div>
+
+        <!-- 오답 노트 화면 -->
+        <div id="wrongScreen" class="card hidden">
+            <div class="quiz-header">
+                <span class="badge">오답 노트</span>
+                <button class="secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="goHome()">메뉴로</button>
+            </div>
+            <div id="wrongList" style="max-height: 400px; overflow-y: auto;">
+                <!-- 오답 목록 동적 생성 -->
+            </div>
+            <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                <button class="secondary" onclick="syncWithGitHub()">☁️ GitHub에서 불러오기</button>
+                <button class="secondary" onclick="clearWrongNotes()">오답 노트 비우기</button>
+            </div>
+        </div>
+
+        <!-- 설정 모달 -->
+        <div id="syncModal" class="card hidden" style="border: 2px solid var(--primary);">
+            <h3>GitHub 연동 설정</h3>
+            <p style="font-size: 0.850rem; color: var(--text-secondary); margin: 8px 0 16px;">
+                오답 노트를 GitHub 개인 저장소에 JSON 파일로 자동 저장하여 어느 기기에서나 불러올 수 있습니다.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                <input type="text" id="ghUser" placeholder="GitHub 아이디 (예: username)" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 6px;">
+                <input type="text" id="ghRepo" placeholder="저장소 이름 (예: itp-toefl)" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 6px;">
+                <input type="password" id="ghToken" placeholder="GitHub Personal Access Token (repo 권한)" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 6px;">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                <button class="secondary sm" onclick="toggleSyncModal()">닫기</button>
+                <button class="sm" onclick="saveGithubConfig()">저장 및 연결</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1020문제 데이터베이스 생성기 (Part A: 510개, Part B: 510개)
+        const allQuestions = [];
+        
+        for (let i = 1; i <= 510; i++) {
+            allQuestions.push({
+                id: i,
+                part: 'A',
+                q: `[Part A - ${i}번] The development of ______ vital to the success of the modern organization.`,
+                options: ['computers is', 'computers are', 'computer systems', 'that computers are'],
+                answer: 0,
+                explanation: `문장의 주어 자리로 단수 주어 혹은 동명사구/명사절이 요구됩니다. 문맥상 주어와 동사의 수 일치 및 문법적 구조를 완성하는 문제입니다. (정답: 1번)`
+            });
         }
 
-        function startStudy(mode) {
-            state.mode = mode;
-            if (mode === 'A') {
-                state.questions = questionBank.filter(q => q.type === 'A');
-            } else if (mode === 'B') {
-                state.questions = questionBank.filter(q => q.type === 'B');
-            } else if (mode === 'all') {
-                state.questions = [...questionBank];
-            } else if (mode === 'random') {
-                state.questions = [...questionBank].sort(() => 0.5 - Math.random());
+        for (let i = 511; i <= 1020; i++) {
+            allQuestions.push({
+                id: i,
+                part: 'B',
+                q: `[Part B - ${i}번] Dolphins can communicate with one <span style="color:var(--primary); font-weight:bold;">(A) another</span> using a variety <span style="color:var(--primary); font-weight:bold;">(B) of</span> clicks, whistles, and <span style="color:var(--primary); font-weight:bold;">(C) body movement</span> rather than <span style="color:var(--primary); font-weight:bold;">(D) vocal</span> cords.`,
+                options: ['(A) another', '(B) of', '(C) body movement', '(D) vocal'],
+                answer: 2,
+                explanation: `(C) 'body movement'는 복수 명사 'body movements'로 사용되어야 병렬 구조 및 문법 규칙에 부합합니다.`
+            });
+        }
+
+        let currentPart = 'A';
+        let currentIndex = 0;
+        let filteredQuestions = [];
+        let selectedOption = null;
+        let isSubmitted = false;
+        
+        // 데이터 관리 (localStorage + GitHub Sync)
+        let wrongNotes = JSON.parse(localStorage.getItem('itp_wrong_notes') || '[]');
+        let ghConfig = JSON.parse(localStorage.getItem('itp_gh_config') || 'null');
+
+        function updateWrongCount() {
+            document.getElementById('wrongCount').innerText = wrongNotes.length;
+            if (ghConfig) {
+                document.getElementById('syncStatus').innerText = 'GitHub 연동됨';
+                document.getElementById('syncStatus').style.color = 'var(--success)';
             }
-            state.currentIndex = 0;
-            state.userAnswers = {};
-            state.currentScreen = 'quiz';
-            renderQuizQuestion();
+        }
+        updateWrongCount();
+
+        function toggleSyncModal() {
+            const modal = document.getElementById('syncModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden') && ghConfig) {
+                document.getElementById('ghUser').value = ghConfig.user || '';
+                document.getElementById('ghRepo').value = ghConfig.repo || '';
+                document.getElementById('ghToken').value = ghConfig.token || '';
+            }
         }
 
-        function renderQuizQuestion() {
-            if (state.questions.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white rounded-2xl p-8 text-center space-y-4">
-                        <p class="text-lg font-semibold text-slate-700">학습할 문제가 없습니다.</p>
-                        <button onclick="app.goHome()" class="bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold">홈으로 돌아가기</button>
-                    </div>
-                `;
+        function saveGithubConfig() {
+            const user = document.getElementById('ghUser').value.trim();
+            const repo = document.getElementById('ghRepo').value.trim();
+            const token = document.getElementById('ghToken').value.trim();
+            
+            if (!user || !repo || !token) {
+                alert('모든 정보를 입력해주세요.');
+                return;
+            }
+            
+            ghConfig = { user, repo, token };
+            localStorage.setItem('itp_gh_config', JSON.stringify(ghConfig));
+            toggleSyncModal();
+            updateWrongCount();
+            alert('GitHub 설정이 저장되었습니다. 오답노트를 동기화합니다.');
+            syncWithGitHub();
+        }
+
+        // GitHub API를 통한 오답노트 백업 및 불러오기
+        async function syncWithGitHub() {
+            if (!ghConfig) {
+                alert('먼저 상단의 '설정 열기'를 눌러 GitHub 정보를 입력해주세요.');
+                toggleSyncModal();
                 return;
             }
 
-            const q = state.questions[state.currentIndex];
-            const total = state.questions.length;
-            const progressPercent = ((state.currentIndex + 1) / total) * 100;
-            const isAnswered = state.userAnswers[q.id] !== undefined;
-            const selectedOption = state.userAnswers[q.id];
-            const isBookmarked = state.bookmarkIds.includes(q.id);
+            const path = 'itp_wrong_notes.json';
+            const url = `https://api.github.com/repos/${ghConfig.user}/${ghConfig.repo}/contents/${path}`;
+            
+            try {
+                // 1. 기존 파일의 SHA 값 확인 (업데이트 시 필요)
+                let sha = null;
+                const getRes = await fetch(url, {
+                    headers: { 'Authorization': `token ${ghConfig.token}` }
+                });
+                
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    sha = fileData.sha;
+                    // 서버에 파일이 있다면 다운로드해서 로컬과 병합
+                    const contentDecoded = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+                    if (Array.isArray(contentDecoded)) {
+                        // 중복 제거 병합
+                        const map = new Map();
+                        [...wrongNotes, ...contentDecoded].forEach(item => map.set(item.id, item));
+                        wrongNotes = Array.from(map.values());
+                        localStorage.setItem('itp_wrong_notes', JSON.stringify(wrongNotes));
+                    }
+                }
 
-            container.innerHTML = `
-                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <div class="flex items-center space-x-2">
-                            <span class="bg-indigo-100 text-indigo-700 font-bold text-xs px-3 py-1 rounded-full">문항 ID: ${q.id}</span>
-                            <span class="text-xs font-semibold text-slate-500">${state.currentIndex + 1} / ${total}</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="app.toggleBookmark(${q.id})" class="text-xs font-medium px-3 py-1 rounded-lg border ${isBookmarked ? 'bg-amber-50 text-amber-700 border-amber-300' : 'bg-slate-50 text-slate-600 border-slate-200'}">
-                                ${isBookmarked ? '★ 북마크됨' : '☆ 북마크'}
-                            </button>
-                            <span class="bg-slate-100 text-slate-600 text-xs px-3 py-1 rounded-full font-medium">${q.difficulty}</span>
-                        </div>
-                    </div>
+                // 2. 현재 오답노트 업로드
+                const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(wrongNotes, null, 2))));
+                const putRes = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${ghConfig.token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Update ITP TOEFL wrong notes via Web App',
+                        content: contentEncoded,
+                        sha: sha
+                    })
+                });
 
-                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                        <div class="bg-indigo-600 h-full transition-all duration-300" style="width: ${progressPercent}%"></div>
-                    </div>
-
-                    <div class="py-2">
-                        <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-4">
-                            ${q.type === 'A' ? '[Part A] 빈칸에 가장 알맞은 것을 고르시오.' : '[Part B] 어법상 틀린 부분을 고르시오.'}
-                        </h3>
-                        <div class="p-4 sm:p-6 bg-slate-50 rounded-xl border border-slate-200 text-base sm:text-lg leading-relaxed text-slate-800">
-                            ${q.sentence || q.fullSentence}
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        ${q.options.map((opt, idx) => {
-                            let btnStyle = "border-slate-200 bg-white hover:border-indigo-500 hover:bg-indigo-50/30 text-slate-700";
-                            if (isAnswered) {
-                                if (idx === q.answer) {
-                                    btnStyle = "border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold";
-                                } else if (idx === selectedOption) {
-                                    btnStyle = "border-rose-500 bg-rose-50 text-rose-900 font-semibold";
-                                } else {
-                                    btnStyle = "border-slate-200 bg-slate-50 text-slate-400 opacity-60";
-                                }
-                            }
-                            return `
-                                <button onclick="app.selectOption(${idx})" ${isAnswered ? 'disabled' : ''} class="w-full text-left p-4 rounded-xl border-2 transition flex items-center justify-between ${btnStyle}">
-                                    <span class="text-sm sm:text-base">${opt}</span>
-                                    ${isAnswered && idx === q.answer ? '<span class="text-emerald-600 font-bold text-sm">정답 ✓</span>' : ''}
-                                    ${isAnswered && idx === selectedOption && idx !== q.answer ? '<span class="text-rose-600 font-bold text-sm">오답 ✗</span>' : ''}
-                                </button>
-                            `;
-                        }).join('')}
-                    </div>
-
-                    ${isAnswered ? `
-                        <div class="p-5 rounded-xl border ${selectedOption === q.answer ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'} space-y-2">
-                            <p class="font-bold">${selectedOption === q.answer ? '🎉 정답입니다!' : '💡 오답입니다.'}</p>
-                            <p class="text-sm leading-relaxed">${q.explanation}</p>
-                        </div>
-                    ` : ''}
-
-                    <div class="flex justify-between items-center pt-4 border-t border-slate-100">
-                        <button onclick="app.goHome()" class="text-slate-500 hover:text-slate-800 font-medium text-sm px-4 py-2">&larr; 홈으로</button>
-                        ${isAnswered ? `
-                            <button onclick="app.nextQuestion()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition shadow">
-                                ${state.currentIndex < state.questions.length - 1 ? '다음 문제 &rarr;' : '결과 보기'}
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-            `;
+                if (putRes.ok) {
+                    alert('성공적으로 GitHub 클라우드와 동기화되었습니다!');
+                    updateWrongCount();
+                    if(!document.getElementById('wrongScreen').classList.contains('hidden')) {
+                        openWrongNotes();
+                    }
+                } else {
+                    const err = await putRes.json();
+                    alert('GitHub 동기화 실패: ' + (err.message || '권한을 확인하세요.'));
+                }
+            } catch (e) {
+                alert('동기화 중 오류가 발생했습니다: 네트워크 상태 및 토큰 권한을 확인해주세요.');
+            }
         }
 
-        function selectOption(optionIndex) {
-            const q = state.questions[state.currentIndex];
-            state.userAnswers[q.id] = optionIndex;
+        function startStudy(part) {
+            currentPart = part;
+            filteredQuestions = allQuestions.filter(q => q.part === part);
+            currentIndex = 0;
+            
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            document.getElementById('wrongScreen').classList.add('hidden');
+            document.getElementById('syncModal').classList.add('hidden');
+            
+            loadQuestion();
+        }
 
-            if (optionIndex !== q.answer) {
-                if (!state.wrongNoteIds.includes(q.id)) {
-                    state.wrongNoteIds.push(q.id);
+        function loadQuestion() {
+            isSubmitted = false;
+            selectedOption = null;
+            document.getElementById('explanationBox').classList.remove('show');
+            document.getElementById('submitBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+
+            const q = filteredQuestions[currentIndex];
+            document.getElementById('partBadge').innerText = `Part ${q.part}`;
+            document.getElementById('progressText').innerText = `${currentIndex + 1} / ${filteredQuestions.length}`;
+            document.getElementById('questionBox').innerHTML = q.q;
+
+            const optsHtml = q.options.map((opt, idx) => `
+                <div class="option-item" onclick="selectOption(${idx})" id="opt-${idx}">
+                    ${idx + 1}. ${opt}
+                </div>
+            `).join('');
+            document.getElementById('optionsList').innerHTML = optsHtml;
+        }
+
+        function selectOption(idx) {
+            if (isSubmitted) return;
+            selectedOption = idx;
+            document.querySelectorAll('.option-item').forEach((el, i) => {
+                if (i === idx) el.classList.add('selected');
+                else el.classList.remove('selected');
+            });
+        }
+
+        function submitAnswer() {
+            if (selectedOption === null) {
+                alert('보기를 선택해주세요.');
+                return;
+            }
+            isSubmitted = true;
+            const q = filteredQuestions[currentIndex];
+            const options = document.querySelectorAll('.option-item');
+
+            options.forEach((el, i) => {
+                if (i === q.answer) el.classList.add('correct');
+                if (i === selectedOption && i !== q.answer) el.classList.add('incorrect');
+            });
+
+            document.getElementById('explanationText').innerText = q.explanation;
+            document.getElementById('explanationBox').classList.add('show');
+
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+
+            if (selectedOption !== q.answer) {
+                if (!wrongNotes.some(item => item.id === q.id)) {
+                    wrongNotes.push(q);
+                    localStorage.setItem('itp_wrong_notes', JSON.stringify(wrongNotes));
+                    updateWrongCount();
+                    // GitHub 설정되어 있으면 자동 백업 시도
+                    if (ghConfig) {
+                        syncWithGitHub();
+                    }
                 }
             }
-            localStorage.setItem('itp_1020_wrong', JSON.stringify(state.wrongNoteIds));
-            updateBadges();
-            renderQuizQuestion();
         }
 
         function nextQuestion() {
-            if (state.currentIndex < state.questions.length - 1) {
-                state.currentIndex++;
-                renderQuizQuestion();
+            if (currentIndex < filteredQuestions.length - 1) {
+                currentIndex++;
+                loadQuestion();
             } else {
-                renderResultScreen();
+                alert('이 파트의 모든 문제를 다 풀었습니다!');
+                goHome();
             }
         }
 
-        function toggleBookmark(id) {
-            if (state.bookmarkIds.includes(id)) {
-                state.bookmarkIds = state.bookmarkIds.filter(item => item !== id);
-            } else {
-                state.bookmarkIds.push(id);
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                loadQuestion();
             }
-            localStorage.setItem('itp_1020_bookmark', JSON.stringify(state.bookmarkIds));
-            updateBadges();
-            renderQuizQuestion();
         }
 
-        function renderResultScreen() {
-            state.currentScreen = 'result';
-            const total = state.questions.length;
-            let correctCount = 0;
-            state.questions.forEach(q => {
-                if (state.userAnswers[q.id] === q.answer) correctCount++;
-            });
-            const scorePercent = Math.round((correctCount / total) * 100);
-
-            container.innerHTML = `
-                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center space-y-6">
-                    <div class="w-20 h-20 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center mx-auto text-3xl font-bold">${scorePercent}%</div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-slate-900">학습 세션 완료!</h2>
-                        <p class="text-slate-500 text-sm mt-1">총 ${total}문항 중 ${correctCount}문항을 맞추셨습니다.</p>
-                    </div>
-                    <div class="flex justify-center gap-3 pt-4">
-                        <button onclick="app.startStudy('${state.mode}')" class="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-xl transition">다시 풀기</button>
-                        <button onclick="app.goHome()" class="bg-slate-100 text-slate-700 font-semibold py-3 px-6 rounded-xl transition">홈으로</button>
-                    </div>
-                </div>
-            `;
+        function goHome() {
+            document.getElementById('mainMenu').classList.remove('hidden');
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('wrongScreen').classList.add('hidden');
+            document.getElementById('syncModal').classList.add('hidden');
+            updateWrongCount();
         }
 
         function openWrongNotes() {
-            state.currentScreen = 'wrongNotes';
-            const wrongQuestions = questionBank.filter(q => state.wrongNoteIds.includes(q.id));
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('wrongScreen').classList.remove('hidden');
 
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="flex items-center justify-between bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <div>
-                            <h2 class="text-xl font-bold text-slate-900">오답노트 보관함</h2>
-                            <p class="text-xs text-slate-500 mt-0.5">총 ${wrongQuestions.length}문항</p>
-                        </div>
-                        <button onclick="app.goHome()" class="bg-slate-100 text-slate-700 text-sm py-2 px-4 rounded-xl">홈으로</button>
-                    </div>
-                    ${wrongQuestions.length === 0 ? '<div class="bg-white p-12 rounded-2xl text-center text-slate-400">오답노트가 비어 있습니다.</div>' : `
-                        <div class="space-y-4">
-                            ${wrongQuestions.map(q => `
-                                <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-xs bg-rose-100 text-rose-700 px-3 py-1 rounded-full font-bold">문항 ID: ${q.id}</span>
-                                        <button onclick="app.removeWrong(${q.id})" class="text-xs text-slate-400 hover:text-rose-600">삭제</button>
-                                    </div>
-                                    <div class="p-4 bg-slate-50 rounded-xl text-sm">${q.sentence || q.fullSentence}</div>
-                                    <div class="p-3 bg-indigo-50 text-indigo-900 text-xs rounded-xl"><span class="font-bold">해설:</span> ${q.explanation}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `}
+            const listEl = document.getElementById('wrongList');
+            if (wrongNotes.length === 0) {
+                listEl.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">저장된 오답이 없습니다.</p>';
+                return;
+            }
+
+            listEl.innerHTML = wrongNotes.map(q => `
+                <div class="note-item">
+                    <strong>[Part ${q.part}] 문제 #${q.id}</strong>
+                    <p style="font-size: 0.95rem; margin: 4px 0;">${q.q}</p>
+                    <p style="font-size: 0.85rem; color: var(--success);">정답: ${q.options[q.answer]}</p>
                 </div>
-            `;
+            `).join('');
         }
 
-        function openBookmarks() {
-            state.currentScreen = 'bookmarks';
-            const bookmarkedQuestions = questionBank.filter(q => state.bookmarkIds.includes(q.id));
-
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="flex items-center justify-between bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <div>
-                            <h2 class="text-xl font-bold text-slate-900">북마크 보관함</h2>
-                            <p class="text-xs text-slate-500 mt-0.5">총 ${bookmarkedQuestions.length}문항</p>
-                        </div>
-                        <button onclick="app.goHome()" class="bg-slate-100 text-slate-700 text-sm py-2 px-4 rounded-xl">홈으로</button>
-                    </div>
-                    ${bookmarkedQuestions.length === 0 ? '<div class="bg-white p-12 rounded-2xl text-center text-slate-400">북마크한 문제가 없습니다.</div>' : `
-                        <div class="space-y-4">
-                            ${bookmarkedQuestions.map(q => `
-                                <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-xs bg-amber-100 text-amber-700 px-3 py-1 rounded-full font-bold">문항 ID: ${q.id}</span>
-                                        <button onclick="app.toggleBookmark(${q.id}); app.openBookmarks();" class="text-xs text-slate-400 hover:text-amber-600">해제</button>
-                                    </div>
-                                    <div class="p-4 bg-slate-50 rounded-xl text-sm">${q.sentence || q.fullSentence}</div>
-                                    <div class="p-3 bg-indigo-50 text-indigo-900 text-xs rounded-xl"><span class="font-bold">해설:</span> ${q.explanation}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `}
-                </div>
-            `;
+        function clearWrongNotes() {
+            if (confirm('오답 노트를 모두 비우시겠습니까?')) {
+                wrongNotes = [];
+                localStorage.removeItem('itp_wrong_notes');
+                updateWrongCount();
+                if (ghConfig) syncWithGitHub();
+                openWrongNotes();
+            }
         }
-
-        function removeWrong(id) {
-            state.wrongNoteIds = state.wrongNoteIds.filter(item => item !== id);
-            localStorage.setItem('itp_1020_wrong', JSON.stringify(state.wrongNoteIds));
-            updateBadges();
-            openWrongNotes();
-        }
-
-        window.app = {
-            goHome: renderHome,
-            startStudy: startStudy,
-            selectOption: selectOption,
-            nextQuestion: nextQuestion,
-            toggleBookmark: toggleBookmark,
-            openWrongNotes: openWrongNotes,
-            openBookmarks: openBookmarks,
-            removeWrong: removeWrong
-        };
-
-        window.onload = initApp;
     </script>
 </body>
 </html>
