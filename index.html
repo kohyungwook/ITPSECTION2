@@ -2,8 +2,11 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ITP Section 2 연습</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2c4fd0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>ITP Section 2 모바일</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -155,6 +158,56 @@ h1,h2,h3{text-wrap:balance;margin:0}
   .jump input{flex:1}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* ===== 모바일 ===== */
+html{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+body{overscroll-behavior-y:none}
+#app{max-width:560px;padding:calc(12px + env(safe-area-inset-top)) 14px calc(110px + env(safe-area-inset-bottom))}
+input{font-size:16px!important}
+.hero h1{font-size:22px}
+.stats{grid-template-columns:1fr 1fr}
+.modes{grid-template-columns:1fr}
+.mode{min-height:64px;justify-content:center}
+.tab{padding:12px}
+.tab b{font-size:15px}
+.jump{margin-left:0;width:100%}
+.jump input{flex:1}
+.qhead{position:sticky;top:0;z-index:4;background:var(--bg);margin:0 -14px 10px;padding:calc(6px + env(safe-area-inset-top)) 14px 0}
+.qhead .prog{margin-bottom:0}
+.card{padding:16px 14px 18px;border-radius:12px}
+.q{font-size:19px;line-height:1.75}
+.ch{min-height:58px;padding:12px 14px}
+.ch .t{font-size:17px}
+.ch:active:not([disabled]){background:var(--accent-soft)}
+.seg{padding:3px 1px}
+.fb{scroll-margin-bottom:100px}
+.bottombar{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;gap:8px;background:var(--card);border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+.bottombar .btn{flex:1;min-height:54px;font-size:16px}
+.bottombar .btn.primary{flex:1.3}
+.bottombar .mid{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;font-variant-numeric:tabular-nums;font-weight:700}
+.bottombar .mid small{font-weight:400;font-size:11px;color:var(--muted)}
+.backdrop{position:fixed;inset:0;background:rgba(10,14,24,.5);z-index:8}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--card);border-radius:18px 18px 0 0;max-height:72%;overflow-y:auto;padding:8px 14px calc(18px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:4px auto 10px}
+.sheet-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.sheet-h span{color:var(--muted);font-size:13px}
+.navgrid{grid-template-columns:repeat(auto-fill,minmax(46px,1fr))}
+.navgrid button{min-height:46px}
+.modal{align-items:end}
+.modal .box{max-width:560px;border-radius:18px 18px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.modal .row .btn{flex:1;min-height:50px}
+.toast{bottom:calc(100px + env(safe-area-inset-bottom))}
+
+.notes{margin-top:10px}
+.note{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-top:10px}
+.note summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;list-style:none;min-height:52px}
+.note summary::-webkit-details-marker{display:none}
+.note .pv{flex:1;min-width:0;font-family:var(--serif);font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.note .wc{font-size:12px;font-weight:700;color:var(--bad);background:var(--bad-soft);border-radius:999px;padding:1px 9px;white-space:nowrap}
+.note[open] summary{border-bottom:1px dashed var(--line)}
+.note .nb{padding:14px}
+.note .ch{cursor:default}
+.empty{color:var(--muted);text-align:center;padding:32px 8px}
 </style>
 </head>
 <body>
@@ -173,7 +226,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 const pad = n => String(n).padStart(4,'0');
 const byN = n => Q[n-1];
 function shuffled(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
-function record(n, ok){ const r = store.rec[n] || {t:0,w:0}; r.t++; if(!ok) r.w++; r.c = ok?1:0; store.rec[n]=r; save(); }
+function record(n, ok, sel){ const r = store.rec[n] || {t:0,w:0}; r.t++; if(!ok) r.w++; r.c = ok?1:0; if(!ok) delete r.m; if(sel!==undefined) r.s=sel; r.ts=Date.now(); store.rec[n]=r; save(); }
 function choicesOf(q){ return q.type==='blank' ? q.choices : q.parts.filter(p=>p[1]).map(p=>p[0]); }
 const typeName = t => t==='blank' ? 'Structure · 구조 완성' : 'Written Expression · 오류 찾기';
 const SEC = {
@@ -182,6 +235,7 @@ const SEC = {
 };
 const secCount = t => Q.filter(q=>q.type===t).length;
 
+let curSec = null;       // 홈에서 고른 섹션 (저장하지 않음)
 let view = 'home';       // home | q | summary
 let S = null;            // 현재 세션
 let timerId = null;
@@ -194,7 +248,7 @@ function startSession(title, queue, opts={}){
   if(!opts.noFilter) queue = typeFilter(queue);
   if(!queue.length){ toast('조건에 맞는 문제가 없습니다.'); return; }
   if(store.shuffle && !opts.exam && !opts.ordered) queue = shuffled(queue);
-  S = {title, queue, idx: opts.idx||0, sel:{}, exam:!!opts.exam, finished:false, confirm:false, limit: opts.limit||0, left: opts.limit||0};
+  S = {back:opts.back||null, title, queue, idx: opts.idx||0, sel:{}, exam:!!opts.exam, finished:false, confirm:false, limit: opts.limit||0, left: opts.limit||0};
   view='q'; clearInterval(timerId);
   if(S.exam){ timerId=setInterval(()=>{ S.left--; const el=document.getElementById('timer'); if(el){ el.textContent=fmtTime(S.left); el.classList.toggle('low',S.left<=300);} if(S.left<=0) finishExam(); },1000); }
   render(); window.scrollTo(0,0);
@@ -216,7 +270,7 @@ function startExam(){
 function finishExam(){
   if(!S||!S.exam||S.finished) return;
   S.finished=true; S.confirm=false; clearInterval(timerId);
-  S.queue.forEach(n=>{ if(S.sel[n]!==undefined) record(n, S.sel[n]===byN(n).a); });
+  S.queue.forEach(n=>{ if(S.sel[n]!==undefined) record(n, S.sel[n]===byN(n).a, S.sel[n]); });
   view='summary'; render(); window.scrollTo(0,0);
 }
 function sessionStats(){
@@ -226,22 +280,22 @@ function sessionStats(){
 }
 
 /* ---------- 렌더 ---------- */
-function render(){ $app.innerHTML = view==='home' ? homeHTML() : view==='summary' ? summaryHTML() : questionHTML(); }
+function render(){ $app.innerHTML = view==='home' ? homeHTML() : view==='notes' ? notesHTML() : view==='summary' ? summaryHTML() : questionHTML(); }
 
 function homeStats(){
   let solved=0, correct=0, wrongNow=0, bm=0;
-  for(let n=1;n<=TOTAL;n++){ if(byN(n).type!==store.sec) continue; const r=store.rec[n]; if(r){ solved++; if(r.c) correct++; else wrongNow++; } if(store.bm[n]) bm++; }
+  for(let n=1;n<=TOTAL;n++){ if(byN(n).type!==store.sec) continue; const r=store.rec[n]; if(r){ solved++; if(r.c) correct++; else if(!r.m) wrongNow++; } if(store.bm[n]) bm++; }
   return {solved,correct,wrongNow,bm};
 }
 function homeHTML(){
-  const st = homeStats(), sec = SEC[store.sec], secN = secCount(store.sec);
+  const st = homeStats(), sec = SEC[curSec||store.sec], secN = secCount(curSec||store.sec);
   const acc = st.solved ? Math.round(st.correct/st.solved*100)+'%' : '–';
-  const tab = (v)=>`<button class="tab" data-act="sec" data-v="${v}" role="tab" aria-selected="${store.sec===v}"><b>${SEC[v].name}</b><span>${SEC[v].ko} · ${secCount(v)}문항</span></button>`;
+  const tab = (v)=>`<button class="tab" data-act="sec" data-v="${v}" role="tab" aria-selected="${curSec===v}"><b>${SEC[v].name}</b><span>${SEC[v].ko} · ${secCount(v)}문항</span></button>`;
   return `
   <div class="hero"><div><div class="eyebrow">TOEFL ITP · Section 2 · 1020문항</div><h1>Structure &amp; Written Expression</h1></div>
   <button class="btn sm" data-act="theme" aria-label="화면 모드 바꾸기">화면 모드</button></div>
   <div class="tabs" role="tablist">${tab('blank')}${tab('error')}</div>
-  <p class="secdesc">${sec.desc}</p>
+  ${curSec ? `<p class="secdesc">${sec.desc}</p>
   <div class="stats">
     <div class="stat"><div class="v">${st.solved}<span style="font-size:14px;color:var(--muted)"> / ${secN}</span></div><div class="l">푼 문제</div></div>
     <div class="stat"><div class="v">${acc}</div><div class="l">최근 풀이 정답률</div></div>
@@ -250,15 +304,16 @@ function homeHTML(){
   </div>
   <div class="section-t">${sec.name} 연습</div>
   <div class="modes">
+    <button class="mode exam" data-act="continue"><b>${st.solved?'이어서 풀기':'처음부터 풀기'}</b><span>번호 순서대로 · ${secN}문항${st.solved?' · 안 푼 첫 문제부터':''}</span></button>
     <button class="mode" data-act="random"><b>랜덤 연습</b><span>${secN}문항에서 무작위로</span></button>
     <button class="mode" data-act="unsolved"><b>안 푼 문제</b><span>${secN-st.solved}문항 남음</span></button>
-    <button class="mode" data-act="wrong"><b>오답 노트</b><span>마지막에 틀린 ${st.wrongNow}문항</span></button>
+    <button class="mode" data-act="wrong"><b>오답 노트</b><span>틀린 ${st.wrongNow}문항 · 정답과 해설 모아보기</span></button>
     <button class="mode" data-act="bookmarks"><b>북마크</b><span>별표 표시한 ${st.bm}문항</span></button>
   </div>
   <div class="opts" style="margin-top:12px">
     <button class="chip" data-act="shuffle" aria-pressed="${store.shuffle}">순서 섞기</button>
     <form class="jump" data-form="jump"><input id="jumpn" type="number" min="1" max="${TOTAL}" placeholder="문제 번호" aria-label="문제 번호"><button class="btn sm" type="submit">이동</button></form>
-  </div>
+  </div>` : `<p class="secdesc">풀고 싶은 섹션을 눌러 선택하세요.</p>`}
   <div class="section-t">실전 모의고사</div>
   <div class="modes"><button class="mode exam" data-act="exam"><b>모의고사 (Structure 15 + Written Expression 25)</b><span>40문항 · 25분 · 제출 후 채점</span></button></div>
   <div class="foot"><span>풀이 기록은 이 브라우저에 저장됩니다.</span><button class="linkbtn" data-act="reset">기록 초기화</button></div>`;
@@ -305,32 +360,37 @@ function questionHTML(){
   }
   const last = S.idx===S.queue.length-1;
   const nextLabel = last ? (S.exam&&!S.finished ? '제출하기' : '결과 보기') : '다음';
-  const nav = S.exam ? `<div class="navgrid">${S.queue.map((m,i)=>{
-      const s=S.sel[m]; let c = S.finished ? (s===undefined?'':(s===byN(m).a?'good':'bad')) : (s!==undefined?'done':'');
-      return `<button class="${c} ${i===S.idx?'cur':''}" data-act="goto" data-i="${i}" aria-label="${i+1}번 문제">${i+1}</button>`;}).join('')}</div>` : '';
   const pct = (S.idx+1)/S.queue.length*100;
+  const sheet = S.navOpen ? `<div class="backdrop" data-act="sheet"></div><div class="sheet" role="dialog" aria-label="문항 목록">
+      <div class="grab"></div><div class="sheet-h"><b>문항 목록</b><span>${S.queue.length}문항</span></div>
+      <div class="navgrid">${S.queue.map((m,i)=>{
+        const s=S.sel[m]; let c = (S.finished||!S.exam) ? (s===undefined?'':(s===byN(m).a?'good':'bad')) : (s!==undefined?'done':'');
+        return `<button class="${c} ${i===S.idx?'cur':''}" data-act="goto" data-i="${i}" aria-label="${i+1}번 문제">${i+1}</button>`;}).join('')}</div>
+      ${S.exam&&!S.finished?`<div class="row"><button class="btn primary" style="flex:1" data-act="submit">제출하기</button></div>`:''}
+    </div>` : '';
   return `
-  <div class="topbar">
-    <button class="btn sm" data-act="${S.finished?'summary':'home'}">${S.finished?'← 결과':'← 목록'}</button>
-    <div class="ttl">${esc(S.title)}</div>
-    ${S.exam&&!S.finished?`<div class="timer ${S.left<=300?'low':''}" id="timer">${fmtTime(S.left)}</div>`:''}
-  </div>
-  <div class="prog"><div style="width:${pct}%"></div></div>
+  <header class="qhead">
+    <div class="topbar">
+      <button class="btn sm" data-act="${S.finished?'summary':'home'}">${S.finished?'← 결과':(S.back==='notes'?'← 오답 노트':'← 목록')}</button>
+      <div class="ttl">${esc(S.title)}</div>
+      ${S.exam&&!S.finished?`<div class="timer ${S.left<=300?'low':''}" id="timer">${fmtTime(S.left)}</div>`:''}
+    </div>
+    <div class="prog"><div style="width:${pct}%"></div></div>
+  </header>
   <article class="card">
     <div class="meta"><span class="qno">${pad(n)}</span><span class="kind">${typeName(q.type)}</span>${q.note?'<span class="note">NOTE</span>':''}
       <button class="star" data-act="bm" aria-pressed="${!!store.bm[n]}" aria-label="북마크">${store.bm[n]?'★':'☆'}</button></div>
-    <p class="inst">${q.type==='blank'?'문법적으로 가장 알맞게 빈칸을 채우는 것을 (A)~(D) 중에서 고르세요.':'밑줄 친 (A)~(D) 중 틀린 문법이나 어색한 표현을 찾으세요.'}</p>
+    <p class="inst">${q.type==='blank'?'문법적으로 가장 알맞게 빈칸을 채우는 것을 고르세요.':'밑줄 친 (A)~(D) 중 틀린 부분을 찾으세요.'}</p>
     ${body}
     <div class="choices">${choicesHTML}</div>
     ${fb}
   </article>
-  <div class="pager">
-    <button class="btn" data-act="prev" ${S.idx===0?'disabled':''}>← 이전</button>
-    <span class="c">${S.idx+1} / ${S.queue.length}</span>
+  <nav class="bottombar">
+    <button class="btn" data-act="prev" ${S.idx===0?'disabled':''} aria-label="이전 문제">← 이전</button>
+    <button class="btn mid" data-act="sheet">${S.idx+1} / ${S.queue.length}<small>문항 목록</small></button>
     <button class="btn primary" data-act="next">${nextLabel} →</button>
-  </div>
-  ${nav}
-  ${S.exam&&!S.finished?`<div class="row"><button class="btn" data-act="submit">제출하기</button></div>`:''}
+  </nav>
+  ${sheet}
   ${S.confirm?confirmHTML():''}`;
 }
 function confirmHTML(){
@@ -367,7 +427,8 @@ function pick(i){
   const n=S.queue[S.idx], q=byN(n);
   if(S.exam){ if(S.finished) return; S.sel[n]=i; render(); return; }
   if(S.sel[n]!==undefined) return;
-  S.sel[n]=i; record(n, i===q.a); render();
+  S.sel[n]=i; record(n, i===q.a, i); try{navigator.vibrate&&navigator.vibrate(i===q.a?15:[30,40,30]);}catch(e){}
+  render(); const f=document.querySelector('.fb'); if(f) f.scrollIntoView({block:'nearest',behavior:'smooth'});
 }
 function next(){
   if(S.idx<S.queue.length-1){ S.idx++; render(); window.scrollTo(0,0); return; }
@@ -375,7 +436,41 @@ function next(){
   view='summary'; render(); window.scrollTo(0,0);
 }
 function prev(){ if(S.idx>0){ S.idx--; render(); window.scrollTo(0,0); } }
-function goHome(){ clearInterval(timerId); S=null; view='home'; render(); window.scrollTo(0,0); }
+function goHome(){ clearInterval(timerId); const b=S&&S.back; S=null; view=b||'home'; render(); window.scrollTo(0,0); }
+/* ---------- 오답 노트 ---------- */
+let noteSort='recent';
+function wrongSorted(sec){
+  const R=n=>store.rec[n];
+  const list=allNums().filter(n=>{const r=R(n); return byN(n).type===sec && r && !r.c && !r.m;});
+  if(noteSort==='recent') list.sort((a,b)=>(R(b).ts||0)-(R(a).ts||0)||a-b);
+  else if(noteSort==='count') list.sort((a,b)=>R(b).w-R(a).w||a-b);
+  else list.sort((a,b)=>a-b);
+  return list;
+}
+function notesHTML(){
+  const sec=curSec||store.sec, list=wrongSorted(sec);
+  const tabs=['blank','error'].map(v=>`<button class="chip" data-act="nsec" data-v="${v}" aria-pressed="${sec===v}">${SEC[v].name} ${wrongSorted(v).length}</button>`).join('');
+  const sorts=[['recent','최근 틀린 순'],['count','많이 틀린 순'],['num','번호순']].map(([v,t])=>`<button class="chip" data-act="nsort" data-v="${v}" aria-pressed="${noteSort===v}">${t}</button>`).join('');
+  return `<div class="topbar"><button class="btn sm" data-act="home">← 목록</button><div class="ttl">오답 노트</div></div>
+  <div class="opts">${tabs}</div>
+  <div class="opts" style="margin-top:8px">${sorts}</div>
+  ${list.length?`<div class="row"><button class="btn primary" style="flex:1" data-act="nretryall">${list.length}문항 모두 다시 풀기</button></div>`:''}
+  <div class="notes">${list.length?list.map(noteItem).join(''):`<p class="empty">${SEC[sec].name}에 오답이 없습니다. 연습하다 틀린 문제가 여기에 모입니다. 다시 풀어서 맞히면 노트에서 빠집니다.</p>`}</div>`;
+}
+function noteItem(n){
+  const q=byN(n), r=store.rec[n], ch=choicesOf(q);
+  const mine=(r.s!==undefined && r.s!==q.a) ? r.s : -1;
+  let body;
+  if(q.type==='blank') body=`<p class="q">${esc(q.stem).replace(/-{3,}/g,()=>`<span class="blank filled">${esc(ch[q.a])}</span>`)}</p>`;
+  else { let k=0; body=`<p class="q">${q.parts.map(p=>{ if(!p[1]) return esc(p[0]); const i=k++; const c=i===q.a?'ok':(i===mine?'no':''); return `<span class="seg ${c}"><span class="u">${esc(p[0])}</span><sup>${p[1]}</sup></span>`; }).join('')}</p>`; }
+  const choices=ch.map((t,i)=>`<div class="ch ${i===q.a?'ok':(i===mine?'no':'')}"><span class="k">${L4[i]}</span><span class="t">${esc(t)}</span></div>`).join('');
+  const fix=q.type==='error'&&q.fix?`<div class="fb ok" style="margin-top:10px">고친 표현: ${esc(ch[q.a])} → ${esc(q.fix)}</div>`:'';
+  const preview=(q.type==='blank'?q.stem:q.parts.map(p=>p[0]).join('')).replace(/-{3,}/g,'____');
+  return `<details class="note"><summary><span class="qno">${pad(n)}</span><span class="pv">${esc(preview.slice(0,80))}</span><span class="wc">${r.w}회</span></summary>
+   <div class="nb">${body}<div class="choices">${choices}</div>${mine>=0?`<div class="eyebrow" style="margin-top:8px">내가 고른 답: (${L4[mine]})</div>`:''}${fix}<div class="exp">${fmtExp(q.exp)}</div>
+   <div class="row"><button class="btn sm" data-act="nretry" data-n="${n}">다시 풀기</button><button class="btn sm" data-act="nmaster" data-n="${n}">외웠어요 (노트에서 빼기)</button></div></div></details>`;
+}
+
 
 $app.addEventListener('click', e=>{
   const t=e.target.closest('[data-act]'); if(!t) return;
@@ -386,19 +481,26 @@ $app.addEventListener('click', e=>{
     case 'exam': startExam(); break;
     case 'random': startSession(SEC[store.sec].name+' 랜덤', shuffled(allNums()), {ordered:true}); break;
     case 'unsolved': startSession(SEC[store.sec].name+' 안 푼 문제', allNums().filter(n=>!store.rec[n])); break;
-    case 'wrong': startSession(SEC[store.sec].name+' 오답 노트', allNums().filter(n=>store.rec[n]&&!store.rec[n].c)); break;
+    case 'wrong': curSec=curSec||store.sec; view='notes'; render(); window.scrollTo(0,0); break;
+    case 'nsec': curSec=store.sec=t.dataset.v; save(); render(); break;
+    case 'nsort': noteSort=t.dataset.v; render(); break;
+    case 'nretryall': startSession('오답 다시 풀기', wrongSorted(curSec||store.sec), {noFilter:true, ordered:true, back:'notes'}); break;
+    case 'nretry': startSession('오답 다시 풀기', [+t.dataset.n], {noFilter:true, ordered:true, back:'notes'}); break;
+    case 'nmaster': { const r=store.rec[+t.dataset.n]; if(r){ r.m=1; save(); render(); toast('노트에서 뺐습니다.'); } break; }
     case 'bookmarks': startSession(SEC[store.sec].name+' 북마크', allNums().filter(n=>store.bm[n])); break;
     case 'lesson': startLesson(+t.dataset.l); break;
-    case 'sec': store.sec=t.dataset.v; save(); render(); break;
+    case 'sec': curSec=t.dataset.v; store.sec=curSec; save(); render(); break;
+    case 'continue': { const q=typeFilter(allNums()); const f=q.findIndex(n=>!store.rec[n]); startSession(SEC[store.sec].name+' 순서대로', q, {ordered:true, noFilter:true, idx:f<0?0:f}); break; }
     case 'shuffle': store.shuffle=!store.shuffle; save(); render(); break;
     case 'theme': { const r=document.documentElement; const dark = r.dataset.theme==='dark' || (!r.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches); r.dataset.theme = dark?'light':'dark'; break; }
     case 'reset': if(t.dataset.sure){ store.rec={}; store.bm={}; save(); render(); toast('기록을 초기화했습니다.'); } else { t.dataset.sure=1; t.textContent='한 번 더 누르면 모든 기록이 지워집니다'; } break;
     case 'pick': pick(+t.dataset.i); break;
     case 'next': next(); break;
     case 'prev': prev(); break;
-    case 'goto': S.idx=+t.dataset.i; view='q'; render(); window.scrollTo(0,0); break;
+    case 'goto': S.idx=+t.dataset.i; S.navOpen=false; view='q'; render(); window.scrollTo(0,0); break;
+    case 'sheet': S.navOpen=!S.navOpen; render(); break;
     case 'bm': { const n=S.queue[S.idx]; if(store.bm[n]) delete store.bm[n]; else store.bm[n]=1; save(); render(); break; }
-    case 'submit': S.confirm=true; render(); break;
+    case 'submit': S.navOpen=false; S.confirm=true; render(); break;
     case 'cancel': S.confirm=false; render(); break;
     case 'finish': finishExam(); break;
     case 'retry-wrong': { const w=S.queue.filter(n=>S.sel[n]!==undefined&&S.sel[n]!==byN(n).a); startSession('틀린 문제 다시 풀기', w, {ordered:true, noFilter:true}); break; }
@@ -411,7 +513,7 @@ $app.addEventListener('submit', e=>{
   const f=e.target.closest('[data-form="jump"]'); if(!f) return; e.preventDefault();
   const n=parseInt(document.getElementById('jumpn').value,10);
   if(!(n>=1&&n<=TOTAL)){ toast('1부터 '+TOTAL+' 사이의 번호를 입력하세요.'); return; }
-  store.sec=byN(n).type; save(); startLesson(Math.ceil(n/PER), n);
+  curSec=store.sec=byN(n).type; save(); startLesson(Math.ceil(n/PER), n);
 });
 document.addEventListener('keydown', e=>{
   if(view!=='q'||!S||e.target.tagName==='INPUT'||e.metaKey||e.ctrlKey||S.confirm) return;
@@ -422,6 +524,13 @@ document.addEventListener('keydown', e=>{
   else if(k==='arrowleft'||k==='p'){ prev(); }
   else if(k==='b'){ const n=S.queue[S.idx]; if(store.bm[n]) delete store.bm[n]; else store.bm[n]=1; save(); render(); }
 });
+let tx=0, ty=0;
+$app.addEventListener('touchstart', e=>{ tx=e.changedTouches[0].clientX; ty=e.changedTouches[0].clientY; }, {passive:true});
+$app.addEventListener('touchend', e=>{
+  if(view!=='q'||!S||S.confirm||S.navOpen) return;
+  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>80 && Math.abs(dy)<45){ if(dx<0) next(); else prev(); }
+}, {passive:true});
 render();
 </script>
 </body>
