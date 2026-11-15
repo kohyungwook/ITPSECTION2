@@ -236,13 +236,6 @@ function homeStats(){
 function homeHTML(){
   const st = homeStats(), sec = SEC[store.sec], secN = secCount(store.sec);
   const acc = st.solved ? Math.round(st.correct/st.solved*100)+'%' : '–';
-  const lessons = [];
-  for(let l=1;l<=TOTAL/PER;l++){
-    const nums = typeFilter(Array.from({length:PER},(_,i)=>(l-1)*PER+i+1)); if(!nums.length) continue;
-    let g=0,r=0; nums.forEach(n=>{ const x=store.rec[n]; if(x){ if(x.c) g++; else r++; } });
-    const N=nums.length;
-    lessons.push(`<button class="lesson" data-act="lesson" data-l="${l}"><b>${l}과</b><small>${N}문항 · ${g+r}개 풀이</small><div class="bar"><i class="g" style="width:${g/N*100}%"></i><i class="r" style="width:${r/N*100}%"></i></div></button>`);
-  }
   const tab = (v)=>`<button class="tab" data-act="sec" data-v="${v}" role="tab" aria-selected="${store.sec===v}"><b>${SEC[v].name}</b><span>${SEC[v].ko} · ${secCount(v)}문항</span></button>`;
   return `
   <div class="hero"><div><div class="eyebrow">TOEFL ITP · Section 2 · 1020문항</div><h1>Structure &amp; Written Expression</h1></div>
@@ -266,8 +259,6 @@ function homeHTML(){
     <button class="chip" data-act="shuffle" aria-pressed="${store.shuffle}">순서 섞기</button>
     <form class="jump" data-form="jump"><input id="jumpn" type="number" min="1" max="${TOTAL}" placeholder="문제 번호" aria-label="문제 번호"><button class="btn sm" type="submit">이동</button></form>
   </div>
-  <div class="section-t">과별 연습</div>
-  <div class="lessons">${lessons.join('')}</div>
   <div class="section-t">실전 모의고사</div>
   <div class="modes"><button class="mode exam" data-act="exam"><b>모의고사 (Structure 15 + Written Expression 25)</b><span>40문항 · 25분 · 제출 후 채점</span></button></div>
   <div class="foot"><span>풀이 기록은 이 브라우저에 저장됩니다.</span><button class="linkbtn" data-act="reset">기록 초기화</button></div>`;
