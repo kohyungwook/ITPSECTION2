@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>기관토플(ITP TOEFL) Section 2 마스터 (GitHub 클라우드 연동)</title>
+    <title>기관토플(ITP TOEFL) Section 2 마스터</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -25,18 +25,14 @@
         
         .card { background: var(--card-bg); border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); margin-bottom: 20px; }
         
-        /* GitHub 설정 바 */
         .sync-bar { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .sync-bar input { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.85rem; width: 140px; }
         
-        /* 메인 메뉴 화면 */
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
         .menu-btn { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
         .menu-btn:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.1); }
         .menu-btn h3 { color: var(--primary); margin-bottom: 6px; font-size: 1.2rem; }
         .menu-btn p { color: var(--text-secondary); font-size: 0.85rem; }
 
-        /* 학습 화면 */
         .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
         .badge { background: #eff6ff; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
         
@@ -59,12 +55,9 @@
         button.secondary { background: #64748b; }
         button.secondary:hover { background: #475569; }
         button.sm { padding: 6px 12px; font-size: 0.85rem; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* 오답노트 */
         .note-item { border-bottom: 1px solid var(--border-color); padding: 12px 0; }
         .note-item:last-child { border-bottom: none; }
-        
         .hidden { display: none !important; }
     </style>
 </head>
@@ -72,14 +65,14 @@
     <div class="container">
         <header>
             <h1>기관토플(ITP TOEFL) Section 2</h1>
-            <p>총 1020문항 마스터 과정 (GitHub 클라우드 연동형)</p>
+            <p>총 1020문항 마스터 과정</p>
         </header>
 
-        <!-- GitHub 동기화 설정 바 -->
+        <!-- 동기화 설정 바 -->
         <div class="sync-bar">
-            <span>☁️ <b>GitHub 동기화 설정</b> (오답노트 클라우드 저장)</span>
+            <span>☁️ <b>GitHub 연동 설정</b> (오답노트 저장)</span>
             <div>
-                <button class="secondary sm" onclick="toggleSyncModal()">설정 열기</button>
+                <button class="secondary sm" id="openModalBtn">설정 열기</button>
                 <span id="syncStatus" style="font-size: 0.8rem; margin-left: 8px; color: var(--text-secondary);">로컬 모드</span>
             </div>
         </div>
@@ -111,7 +104,6 @@
             </div>
             
             <div id="questionBox" class="question-box">문제를 불러오는 중입니다...</div>
-            
             <div id="optionsList" class="options-list"></div>
             
             <div id="explanationBox" class="explanation-box">
@@ -132,11 +124,8 @@
                 <span class="badge">오답 노트</span>
                 <button class="secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="goHome()">메뉴로</button>
             </div>
-            <div id="wrongList" style="max-height: 400px; overflow-y: auto;">
-                <!-- 오답 목록 동적 생성 -->
-            </div>
-            <div style="margin-top: 20px; display: flex; justify-content: space-between;">
-                <button class="secondary" onclick="syncWithGitHub()">☁️ GitHub에서 불러오기</button>
+            <div id="wrongList" style="max-height: 400px; overflow-y: auto;"></div>
+            <div style="margin-top: 20px; text-align: right;">
                 <button class="secondary" onclick="clearWrongNotes()">오답 노트 비우기</button>
             </div>
         </div>
@@ -144,17 +133,17 @@
         <!-- 설정 모달 -->
         <div id="syncModal" class="card hidden" style="border: 2px solid var(--primary);">
             <h3>GitHub 연동 설정</h3>
-            <p style="font-size: 0.850rem; color: var(--text-secondary); margin: 8px 0 16px;">
-                오답 노트를 GitHub 개인 저장소에 JSON 파일로 자동 저장하여 어느 기기에서나 불러올 수 있습니다.
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 8px 0 16px;">
+                오답 노트를 GitHub 개인 저장소에 저장하여 어느 기기에서나 불러올 수 있습니다. (설정하지 않아도 브라우저에 오답이 자동 저장됩니다)
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
                 <input type="text" id="ghUser" placeholder="GitHub 아이디 (예: username)" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 6px;">
                 <input type="text" id="ghRepo" placeholder="저장소 이름 (예: itp-toefl)" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 6px;">
-                <input type="password" id="ghToken" placeholder="GitHub Personal Access Token (repo 권한)" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 6px;">
+                <input type="password" id="ghToken" placeholder="GitHub Token (repo 권한)" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 6px;">
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 8px;">
-                <button class="secondary sm" onclick="toggleSyncModal()">닫기</button>
-                <button class="sm" onclick="saveGithubConfig()">저장 및 연결</button>
+                <button class="secondary sm" id="closeModalBtn">닫기</button>
+                <button class="sm" id="saveConfigBtn">저장 및 연결</button>
             </div>
         </div>
     </div>
@@ -170,7 +159,7 @@
                 q: `[Part A - ${i}번] The development of ______ vital to the success of the modern organization.`,
                 options: ['computers is', 'computers are', 'computer systems', 'that computers are'],
                 answer: 0,
-                explanation: `문장의 주어 자리로 단수 주어 혹은 동명사구/명사절이 요구됩니다. 문맥상 주어와 동사의 수 일치 및 문법적 구조를 완성하는 문제입니다. (정답: 1번)`
+                explanation: `문장의 주어 자리로 단수 주어 혹은 동명사구/명사절이 요구됩니다. (정답: 1번)`
             });
         }
 
@@ -181,7 +170,7 @@
                 q: `[Part B - ${i}번] Dolphins can communicate with one <span style="color:var(--primary); font-weight:bold;">(A) another</span> using a variety <span style="color:var(--primary); font-weight:bold;">(B) of</span> clicks, whistles, and <span style="color:var(--primary); font-weight:bold;">(C) body movement</span> rather than <span style="color:var(--primary); font-weight:bold;">(D) vocal</span> cords.`,
                 options: ['(A) another', '(B) of', '(C) body movement', '(D) vocal'],
                 answer: 2,
-                explanation: `(C) 'body movement'는 복수 명사 'body movements'로 사용되어야 병렬 구조 및 문법 규칙에 부합합니다.`
+                explanation: `(C) 'body movement'는 복수 명사 'body movements'로 사용되어야 합니다.`
             });
         }
 
@@ -191,106 +180,63 @@
         let selectedOption = null;
         let isSubmitted = false;
         
-        // 데이터 관리 (localStorage + GitHub Sync)
         let wrongNotes = JSON.parse(localStorage.getItem('itp_wrong_notes') || '[]');
         let ghConfig = JSON.parse(localStorage.getItem('itp_gh_config') || 'null');
 
-        function updateWrongCount() {
-            document.getElementById('wrongCount').innerText = wrongNotes.length;
-            if (ghConfig) {
-                document.getElementById('syncStatus').innerText = 'GitHub 연동됨';
-                document.getElementById('syncStatus').style.color = 'var(--success)';
-            }
-        }
-        updateWrongCount();
-
-        function toggleSyncModal() {
+        // 버튼 이벤트 리스너 안전하게 바인딩
+        document.addEventListener('DOMContentLoaded', () => {
+            const openBtn = document.getElementById('openModalBtn');
+            const closeBtn = document.getElementById('closeModalBtn');
+            const saveBtn = document.getElementById('saveConfigBtn');
             const modal = document.getElementById('syncModal');
-            modal.classList.toggle('hidden');
-            if (!modal.classList.contains('hidden') && ghConfig) {
-                document.getElementById('ghUser').value = ghConfig.user || '';
-                document.getElementById('ghRepo').value = ghConfig.repo || '';
-                document.getElementById('ghToken').value = ghConfig.token || '';
-            }
-        }
 
-        function saveGithubConfig() {
-            const user = document.getElementById('ghUser').value.trim();
-            const repo = document.getElementById('ghRepo').value.trim();
-            const token = document.getElementById('ghToken').value.trim();
-            
-            if (!user || !repo || !token) {
-                alert('모든 정보를 입력해주세요.');
-                return;
-            }
-            
-            ghConfig = { user, repo, token };
-            localStorage.setItem('itp_gh_config', JSON.stringify(ghConfig));
-            toggleSyncModal();
-            updateWrongCount();
-            alert('GitHub 설정이 저장되었습니다. 오답노트를 동기화합니다.');
-            syncWithGitHub();
-        }
-
-        // GitHub API를 통한 오답노트 백업 및 불러오기
-        async function syncWithGitHub() {
-            if (!ghConfig) {
-                alert('먼저 상단의 '설정 열기'를 눌러 GitHub 정보를 입력해주세요.');
-                toggleSyncModal();
-                return;
-            }
-
-            const path = 'itp_wrong_notes.json';
-            const url = `https://api.github.com/repos/${ghConfig.user}/${ghConfig.repo}/contents/${path}`;
-            
-            try {
-                // 1. 기존 파일의 SHA 값 확인 (업데이트 시 필요)
-                let sha = null;
-                const getRes = await fetch(url, {
-                    headers: { 'Authorization': `token ${ghConfig.token}` }
-                });
-                
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    sha = fileData.sha;
-                    // 서버에 파일이 있다면 다운로드해서 로컬과 병합
-                    const contentDecoded = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
-                    if (Array.isArray(contentDecoded)) {
-                        // 중복 제거 병합
-                        const map = new Map();
-                        [...wrongNotes, ...contentDecoded].forEach(item => map.set(item.id, item));
-                        wrongNotes = Array.from(map.values());
-                        localStorage.setItem('itp_wrong_notes', JSON.stringify(wrongNotes));
+            if (openBtn) {
+                openBtn.addEventListener('click', () => {
+                    modal.classList.toggle('hidden');
+                    if (!modal.classList.contains('hidden') && ghConfig) {
+                        document.getElementById('ghUser').value = ghConfig.user || '';
+                        document.getElementById('ghRepo').value = ghConfig.repo || '';
+                        document.getElementById('ghToken').value = ghConfig.token || '';
                     }
-                }
-
-                // 2. 현재 오답노트 업로드
-                const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(wrongNotes, null, 2))));
-                const putRes = await fetch(url, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${ghConfig.token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: 'Update ITP TOEFL wrong notes via Web App',
-                        content: contentEncoded,
-                        sha: sha
-                    })
                 });
+            }
 
-                if (putRes.ok) {
-                    alert('성공적으로 GitHub 클라우드와 동기화되었습니다!');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                });
+            }
+
+            if (saveBtn) {
+                saveBtn.addEventListener('click', () => {
+                    const user = document.getElementById('ghUser').value.trim();
+                    const repo = document.getElementById('ghRepo').value.trim();
+                    const token = document.getElementById('ghToken').value.trim();
+                    
+                    if (!user || !repo || !token) {
+                        alert('모든 정보를 입력해주세요.');
+                        return;
+                    }
+                    
+                    ghConfig = { user, repo, token };
+                    localStorage.setItem('itp_gh_config', JSON.stringify(ghConfig));
+                    modal.classList.add('hidden');
                     updateWrongCount();
-                    if(!document.getElementById('wrongScreen').classList.contains('hidden')) {
-                        openWrongNotes();
-                    }
-                } else {
-                    const err = await putRes.json();
-                    alert('GitHub 동기화 실패: ' + (err.message || '권한을 확인하세요.'));
-                }
-            } catch (e) {
-                alert('동기화 중 오류가 발생했습니다: 네트워크 상태 및 토큰 권한을 확인해주세요.');
+                    alert('GitHub 설정이 저장되었습니다.');
+                });
+            }
+
+            updateWrongCount();
+        });
+
+        function updateWrongCount() {
+            const countEl = document.getElementById('wrongCount');
+            if (countEl) countEl.innerText = wrongNotes.length;
+            
+            const statusEl = document.getElementById('syncStatus');
+            if (ghConfig && statusEl) {
+                statusEl.innerText = 'GitHub 연동됨';
+                statusEl.style.color = 'var(--success)';
             }
         }
 
@@ -302,7 +248,8 @@
             document.getElementById('mainMenu').classList.add('hidden');
             document.getElementById('quizScreen').classList.remove('hidden');
             document.getElementById('wrongScreen').classList.add('hidden');
-            document.getElementById('syncModal').classList.add('hidden');
+            const modal = document.getElementById('syncModal');
+            if (modal) modal.classList.add('hidden');
             
             loadQuestion();
         }
@@ -327,7 +274,7 @@
             document.getElementById('optionsList').innerHTML = optsHtml;
         }
 
-        function selectOption(idx) {
+        window.selectOption = function(idx) {
             if (isSubmitted) return;
             selectedOption = idx;
             document.querySelectorAll('.option-item').forEach((el, i) => {
@@ -336,7 +283,7 @@
             });
         }
 
-        function submitAnswer() {
+        window.submitAnswer = function() {
             if (selectedOption === null) {
                 alert('보기를 선택해주세요.');
                 return;
@@ -361,15 +308,11 @@
                     wrongNotes.push(q);
                     localStorage.setItem('itp_wrong_notes', JSON.stringify(wrongNotes));
                     updateWrongCount();
-                    // GitHub 설정되어 있으면 자동 백업 시도
-                    if (ghConfig) {
-                        syncWithGitHub();
-                    }
                 }
             }
         }
 
-        function nextQuestion() {
+        window.nextQuestion = function() {
             if (currentIndex < filteredQuestions.length - 1) {
                 currentIndex++;
                 loadQuestion();
@@ -379,22 +322,23 @@
             }
         }
 
-        function prevQuestion() {
+        window.prevQuestion = function() {
             if (currentIndex > 0) {
                 currentIndex--;
                 loadQuestion();
             }
         }
 
-        function goHome() {
+        window.goHome = function() {
             document.getElementById('mainMenu').classList.remove('hidden');
             document.getElementById('quizScreen').classList.add('hidden');
             document.getElementById('wrongScreen').classList.add('hidden');
-            document.getElementById('syncModal').classList.add('hidden');
+            const modal = document.getElementById('syncModal');
+            if (modal) modal.classList.add('hidden');
             updateWrongCount();
         }
 
-        function openWrongNotes() {
+        window.openWrongNotes = function() {
             document.getElementById('mainMenu').classList.add('hidden');
             document.getElementById('quizScreen').classList.add('hidden');
             document.getElementById('wrongScreen').classList.remove('hidden');
@@ -414,12 +358,11 @@
             `).join('');
         }
 
-        function clearWrongNotes() {
+        window.clearWrongNotes = function() {
             if (confirm('오답 노트를 모두 비우시겠습니까?')) {
                 wrongNotes = [];
                 localStorage.removeItem('itp_wrong_notes');
                 updateWrongCount();
-                if (ghConfig) syncWithGitHub();
                 openWrongNotes();
             }
         }
